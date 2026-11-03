@@ -25,7 +25,7 @@
 
 开发环境：Arduino IDE 或 Arduino CLI，M5Stack ESP32 3.3.9、LIS3MDL 2.0.0、LSM6 2.0.1。
 
-1. 将 `firmware/Kit32_StampC3/WifiCredentials.example.h` 复制为同目录的 `WifiCredentials.h`，填写自己的热点名称和密码。该文件已被 Git 忽略。
+1. 本私有仓库已包含当前热点的 `firmware/Kit32_StampC3/WifiCredentials.h`。换热点时编辑此文件；`WifiCredentials.example.h` 保留为空白配置模板。
 2. 电脑继续连接上网 Wi-Fi，同时开启 2.4 GHz 移动热点。
 3. 用 USB 连接自己的小车，确认实际 CH9102 串口。
 4. 编译并上传，示例中的 COM8 必须替换为实际端口：
@@ -74,6 +74,6 @@ examples/               明确标为非实测的合成灰度示例
 
 ## 凭据与许可
 
-仓库不包含实际 Wi-Fi 密码、实测记录、编译固件或借用车原始 Flash 备份。编译后的固件可能包含自己的热点凭据，应仅保存在自己的电脑上。
+按所有者明确要求，本私有仓库包含当前实际 Wi-Fi 配置、已编译扫描固件、借用车原始 Flash 备份和项目历史版本压缩包。位置分别为 `firmware/Kit32_StampC3/WifiCredentials.h`、`firmware/prebuilt/`、`backups/original/`、`backups/releases/`。这些备份的内容也可能包含热点凭据。仓库保持私有。
 
 保留原项目附带的 `firmware/Kit32_StampC3/LICENSE_Freenove_WS2812_Lib_for_ESP32`。项目包含课程示例和后续修改；本仓库没有对全部来源重新授予开源许可，公开分发前请确认课程代码的使用条款。

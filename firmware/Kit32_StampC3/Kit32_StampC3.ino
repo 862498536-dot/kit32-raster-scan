@@ -3,8 +3,8 @@
 
 #include "RobotWifiAP.h"
 
-// Copy WifiCredentials.example.h to WifiCredentials.h and enter your hotspot.
-// WifiCredentials.h is deliberately excluded from version control.
+// WifiCredentials.h contains the current hotspot configuration.
+// The owner requested that it be tracked in this private repository.
 #include "WifiCredentials.h"
 RobotWifiAP_c server(HOTSPOT_SSID, HOTSPOT_PASSWORD, 80);
 
