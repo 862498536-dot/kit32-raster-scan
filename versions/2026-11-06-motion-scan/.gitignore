@@ -1,0 +1,9 @@
+**/RobotNetwork.local.h
+**/WifiCredentials.h
+**/build/
+**/exports/
+web_console/results/
+*.log
+*.bin
+*.elf
+*.class

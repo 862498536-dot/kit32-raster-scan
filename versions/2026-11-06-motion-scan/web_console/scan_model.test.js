@@ -1,0 +1,22 @@
+'use strict';
+const assert=require('node:assert/strict'),M=require('./scan_model');
+const p=M.route();assert.equal(p.length,14);assert.deepEqual(p[0],[0,0]);assert.deepEqual(p.at(-1),[300,200]);
+let total=0;for(let i=1;i<p.length;i++){const dx=Math.abs(p[i][0]-p[i-1][0]),dy=Math.abs(p[i][1]-p[i-1][1]);assert(dx===0||dy===0);total+=dx+dy;}assert.equal(total,1700);
+for(let c=0;c<7;c++){assert.equal(p[c*2][0],c*50);assert.equal(Math.abs(p[c*2+1][1]-p[c*2][1]),200);if(c<6)assert.equal(Math.abs(p[c*2+2][0]-p[c*2+1][0]),50);}
+let s=M.ingest(null,'SCAN,BEGIN,42,300,200,50,5,7,41,12.5');assert.equal(s.sensorForwardOffsetMm,12.5);
+assert(s.raw.every(row=>row.every(v=>v===null)));
+M.ingest(s,'SCAN,CELL,42,0,0,600.00,5,0.10,0.20');M.ingest(s,'SCAN,CELL,42,6,40,2400,3,300,200');
+assert.equal(s.raw[0][0],600);assert.equal(s.raw[40][6],2400);assert.equal(M.extent(s).filled,2);
+assert.equal(M.gray(600,s,600,2400),255);assert.equal(M.gray(2400,s,600,2400),0);
+assert.equal(M.gray(null,s),null);assert.equal(M.gray(2400,s),0);
+M.ingest(s,'SCAN,CELL,41,0,1,900,1,0,5');assert.equal(s.raw[1][0],null);
+M.ingest(s,'SCAN,CELL,42,7,0,600,1,0,0');assert.equal(M.extent(s).filled,2);
+M.ingest(s,'SCAN,CELL,42,0,1,NaN,1,0,5');assert.equal(s.raw[1][0],null);
+M.ingest(s,'SCAN,META,42,300,200,50,5,7,41,12.5');assert.equal(M.extent(s).filled,2);
+M.ingest(s,'SCAN,END,42,FAULT,ENCODER_STALL');assert.equal(s.state,'FAULT');assert.equal(s.reason,'ENCODER_STALL');
+assert.equal(M.matrixCsv(s).split('\n').length,42);assert.equal(M.matrixCsv(s).split('\n')[1],'0,600.00,,,,,,');
+const t=M.telemetry('10,0,0,1.57,45,45,1,1,100,200,300,400,500,1');assert.equal(t.dn3,300);
+assert.equal(M.telemetry('SCAN,BEGIN,42'),null);
+s=M.ingest(s,'SCAN,BEGIN,43,300,200,50,5,7,41,0');assert.equal(M.extent(s),null);
+assert(M.svg(s).includes('pink = missing'));
+console.log('PASS: 7 lanes, 6 shifts, 1700 mm route; matrix orientation, missing values, DN3 parser, calibration, recovery and fault handling.');

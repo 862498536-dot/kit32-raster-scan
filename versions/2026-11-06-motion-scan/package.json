@@ -1,0 +1,11 @@
+{
+  "name": "kit32-raster-scan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DN3 reflectance raster scanning with an ESP32-C3 robot and local dashboard",
+  "scripts": {
+    "start": "node web_console/wifi_bridge.js",
+    "test": "node web_console/scan_model.test.js && node web_console/bridge.test.js"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,9 @@
+wheel,direction,pwm,unloaded_counts_per_second,scope
+left,forward,40,314.95,Oct18_mean_three_trials_unloaded
+left,forward,50,433.36,Oct18_mean_three_trials_unloaded
+left,reverse,40,318.01,Oct18_mean_three_trials_unloaded
+left,reverse,50,442.61,Oct18_mean_three_trials_unloaded
+right,forward,40,343.94,Oct18_mean_three_trials_unloaded
+right,forward,50,465.09,Oct18_mean_three_trials_unloaded
+right,reverse,40,356.94,Oct18_mean_three_trials_unloaded
+right,reverse,50,473.26,Oct18_mean_three_trials_unloaded
