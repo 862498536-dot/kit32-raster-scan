@@ -3,7 +3,7 @@
 
 #include "RobotWifiAP.h"
 
-// The computer joins this robot-hosted network. No computer hotspot needed.
+// Preserve the established computer-hotspot connection used by the earlier project.
 #include "RobotNetwork.h"
 
 #include "Robot.h"
@@ -43,6 +43,7 @@ void processSerialCommand() {
     controller.requestDump();
     sendCommandReply("ACK,DUMP");
   } else if (strcmp(serial_command, "STATUS") == 0) {
+    sendCommandReply("INFO,FIRMWARE,KIT32_CLOSED_LOOP_20261117,PC_HOTSPOT");
     controller.reportStatus(server);
   } else if (strcmp(serial_command, "PING") == 0) {
     sendCommandReply("ACK,PING");
@@ -90,10 +91,13 @@ void setup() {
   if (!server.begin()) {
     Serial.println("ERROR,WIFI_SETUP_FAILED");
   } else {
-    Serial.printf("INFO,WIFI_AP,%s\n", server.ip().toString().c_str());
+    Serial.println("INFO,WIFI_CONNECTING");
   }
 
   robot.initialise();
+  // Explicitly clear any motor request left in the separate motor controller.
+  robot.setMotorPWM(0, 0);
+  Serial.println("INFO,FIRMWARE,KIT32_CLOSED_LOOP_20261117,PC_HOTSPOT");
 //  robot.initialise("team name");
 
 

@@ -11,9 +11,10 @@ Stop stops the model; Start resets and starts a new run.
 Speed cycles through x1, x2 and x4. Clear Trail clears drawn points only.
 
 LIVE
-Join the robot Wi-Fi configured in RobotNetwork.local.h network first.
+Enable the computer hotspot configured in RobotNetwork.local.h first.
+Set ROBOT_IP in the sketch to the DHCP address reported by the robot.
 Disconnect the robot from the web console or other telemetry applications.
-Click Connect Live to connect to 192.168.4.1:80.
+Click Connect Live to connect to the robot DHCP address on port 80.
 Connecting sends PING and STATUS only; it does not start movement.
 Start and Stop send START and STOP to the real robot in Live mode.
 Disconnect does not stop an already running robot.

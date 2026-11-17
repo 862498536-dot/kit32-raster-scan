@@ -5,26 +5,26 @@
 #include <stdarg.h>
 
 /**
-   @brief Provides one TCP client connection on the robot-hosted hotspot.
+   @brief Provides one TCP client connection after joining the computer hotspot.
 
-   The class creates a WiFi access point and owns a single active TCP client.
+   The class joins a WiFi network and owns a single active TCP client.
    It is a transport helper: callers decide the meaning and format of transmitted
    bytes. Call update() regularly to accept or retire client connections.
 */
 class RobotWifiAP_c {
   public:
     /**
-       @brief Configures the robot hotspot and the TCP listening port.
-       @param ssid Robot hotspot name.
-       @param password Robot hotspot password.
+       @brief Configures the network to join and the TCP listening port.
+       @param ssid Computer hotspot name.
+       @param password Computer hotspot password.
        @param port TCP port on which the server listens.
     */
     RobotWifiAP_c(const char* ssid, const char* password, uint16_t port);
 
     /**
-       @brief Starts the robot access point and TCP server.
-       @return True when the access point started successfully.
-       @note The access point uses 192.168.4.1.
+       @brief Begins joining WiFi asynchronously.
+       @return True when connection setup was requested, not proof of association.
+       @note update() starts the TCP server after WiFi receives an IP address.
     */
     bool begin();
 
@@ -85,10 +85,10 @@ class RobotWifiAP_c {
     /** @brief Closes the active client connection, if any. */
     void disconnectClient();
 
-    /** @brief Returns the access point IP address. */
+    /** @brief Returns the DHCP-assigned station IP address. */
     IPAddress ip() const;
 
-    /** @brief Returns the number of connected hotspot clients. */
+    /** @brief Returns one when associated with WiFi, otherwise zero. */
     int stationCount() const;
 
     /**

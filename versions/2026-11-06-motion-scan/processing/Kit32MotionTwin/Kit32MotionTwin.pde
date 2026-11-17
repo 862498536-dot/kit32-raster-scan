@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-final String ROBOT_IP = "192.168.4.1";
+final String ROBOT_IP = "192.168.137.250";
 final int ROBOT_PORT = 80;
 ArrayList<PVector> points = new ArrayList<PVector>();
 ConcurrentLinkedQueue<String> incoming = new ConcurrentLinkedQueue<String>();

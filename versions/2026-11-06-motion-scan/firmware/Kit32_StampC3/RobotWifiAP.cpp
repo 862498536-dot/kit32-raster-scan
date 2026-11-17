@@ -5,13 +5,9 @@ RobotWifiAP_c::RobotWifiAP_c(const char* ssid, const char* password, uint16_t po
 }
 
 bool RobotWifiAP_c::begin() {
-  WiFi.mode(WIFI_AP);
-  const IPAddress address(192, 168, 4, 1);
-  if (!WiFi.softAPConfig(address, address, IPAddress(255, 255, 255, 0)) ||
-      !WiFi.softAP(_ssid, _password)) return false;
-  _server.begin();
-  _server.setNoDelay(true);
-  _listening = true;
+  WiFi.mode(WIFI_STA);
+  WiFi.setAutoReconnect(true);
+  WiFi.begin(_ssid, _password);
   _started = true;
   return true;
 }
@@ -19,6 +15,18 @@ bool RobotWifiAP_c::begin() {
 void RobotWifiAP_c::update() {
   if (!_started) {
     return; // not ready
+  }
+
+  if (WiFi.status() != WL_CONNECTED) {
+    if (_client) _client.stop();
+    if (_listening) { _server.end(); _listening = false; }
+    return;
+  }
+  if (!_listening) {
+    _server.begin();
+    _server.setNoDelay(true);
+    _listening = true;
+    Serial.printf("INFO,WIFI_IP,%s\n", WiFi.localIP().toString().c_str());
   }
 
   if (_client && !_client.connected()) {
@@ -106,11 +114,11 @@ void RobotWifiAP_c::disconnectClient() {
 }
 
 IPAddress RobotWifiAP_c::ip() const {
-  return WiFi.softAPIP();
+  return WiFi.localIP();
 }
 
 int RobotWifiAP_c::stationCount() const {
-  return WiFi.softAPgetStationNum();
+  return WiFi.status() == WL_CONNECTED ? 1 : 0;
 }
 
 void RobotWifiAP_c::setAcceptIntervalMs(unsigned long intervalMs) {

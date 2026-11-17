@@ -2,7 +2,7 @@
 // Real measurements are saved under results/; no simulated readings enter this path.
 const http=require('http'),net=require('net'),fs=require('fs'),path=require('path'),crypto=require('crypto');
 const model=require('./scan_model');
-const PORT=Number(process.env.KIT32_WEB_PORT || 8766), DEFAULT_HOST=process.env.KIT32_HOST||'192.168.4.1';
+const PORT=Number(process.env.KIT32_WEB_PORT || 8766), DEFAULT_HOST=process.env.KIT32_HOST||'192.168.137.250';
 const links=new Map(), outputs=path.join(__dirname,'results');
 const origins=new Set(['http://127.0.0.1:8766','http://localhost:8766','http://127.0.0.1:8765']);
 function frame(socket,text,opcode=1){if(socket.destroyed)return;const data=Buffer.isBuffer(text)?text:Buffer.from(text);let head;if(data.length<126)head=Buffer.from([0x80|opcode,data.length]);else{head=Buffer.alloc(4);head[0]=0x80|opcode;head[1]=126;head.writeUInt16BE(data.length,2);}socket.write(Buffer.concat([head,data]));}
@@ -52,7 +52,7 @@ const server=http.createServer((req,res)=>{
 server.on('upgrade',(req,socket,head)=>{
  const uri=new URL(req.url,'http://127.0.0.1'),host=uri.searchParams.get('host')||DEFAULT_HOST;
  const last=Number(host.split('.').pop());
- if(uri.pathname!=='/ws'||!req.headers['sec-websocket-key']||!origins.has(req.headers.origin)||!(host==='192.168.4.1'||(/^192\.168\.137\.\d{1,3}$/.test(host)&&last>=2&&last<=254))){socket.destroy();return;}
+ if(uri.pathname!=='/ws'||!req.headers['sec-websocket-key']||!origins.has(req.headers.origin)||!(host==='192.168.137.250'||(/^192\.168\.137\.\d{1,3}$/.test(host)&&last>=2&&last<=254))){socket.destroy();return;}
  const key=crypto.createHash('sha1').update(req.headers['sec-websocket-key']+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
  socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: '+key+'\r\n\r\n');
  const link=connectRobot(host);link.clients.add(socket);const state={bytes:head||Buffer.alloc(0)};
